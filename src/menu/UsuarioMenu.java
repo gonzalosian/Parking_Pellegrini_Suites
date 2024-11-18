@@ -23,7 +23,7 @@ public class UsuarioMenu {
 						SessionManager.getInstance().getUsuarioLogueado().getApellido());
 				System.out.println("");
 				System.out.println("----- Menú de Usuario -----");
-				System.out.println("1. Check-In");
+				System.out.println("1. Movimientos Parking");
 				System.out.println("2. Descuentos");
 				System.out.println("3. Tarifas");
 				System.out.println("4. Salir");

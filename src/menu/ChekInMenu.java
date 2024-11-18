@@ -121,7 +121,6 @@ public class ChekInMenu {
 				System.out.println("---------------------");
 				System.out.println("No hay puestos libres");
 				System.out.println("---------------------");
-				mostrarUsuarioMenu();
 			} else {
 				// actualizar estado de PuestoDePlaya.
 				puestoLibre.setIdEstadoPuestoPlaya(EnumEstadosPuestosPlaya.OCUPADO);
@@ -163,8 +162,6 @@ public class ChekInMenu {
 						System.out.println("Entrada inválida. Presione la tecla C para continuar.");
 					}
 				} while (!continuar.equalsIgnoreCase("C"));
-
-				mostrarUsuarioMenu();
 			}
 		} catch (Exception e) {
 			System.out.println("Error inesperado: " + e.getMessage());
@@ -194,11 +191,6 @@ public class ChekInMenu {
 		}
 
 		return idMovimientosList;
-	}
-
-	private void mostrarUsuarioMenu() {
-		UsuarioMenu usuarioMenu = new UsuarioMenu(context);
-		usuarioMenu.mostrar();
 	}
 
 	private List<Integer> listarTiposVehiculos(boolean devolverIds) {
