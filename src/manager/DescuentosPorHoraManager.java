@@ -74,7 +74,9 @@ public class DescuentosPorHoraManager implements IDescuentosPorHoraManager {
 
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setInt(1, cantidadHoras);
-			stmt.setInt(2, idDescuentoParaModificar);
+			
+			if(idDescuentoParaModificar != null)
+				stmt.setInt(2, idDescuentoParaModificar);
 
 			ResultSet rs = stmt.executeQuery();
 
