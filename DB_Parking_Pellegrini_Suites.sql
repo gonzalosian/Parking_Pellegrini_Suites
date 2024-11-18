@@ -7,6 +7,8 @@ Alumno: Gonzalo Sian
 Leg.: VINF013776
 */
 
+-- drop database `PARKING`;
+
 CREATE DATABASE `PARKING`
     CHARACTER SET 'utf8mb4'
     COLLATE 'utf8mb4_general_ci';
@@ -69,6 +71,8 @@ CREATE TABLE `Usuarios` (
   `nombre` varchar(50) NOT NULL,
   `dni` integer NOT NULL,
   `idCargo` integer NOT NULL,
+  `userName` varchar(20) NOT NULL,
+  `userPass` varchar(20) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `fk_Cargos_id` (`idCargo`),
   CONSTRAINT `fk_Cargos_id` FOREIGN KEY (`idCargo`) REFERENCES `Cargos` (`id`) ON UPDATE CASCADE
@@ -176,19 +180,25 @@ insert into EstadosPuestosPlaya (descripcion, colorRGB) values
 
 insert into DescuentosPorHora (cantidadDias, porcentajeDescuento) values (30, 10),(40, 15),(50,20);
 
+-- select * from DescuentosPorHora;
+
 insert into Matafuegos (idPiso, fechaVencimiento, fechaPreAviso) values
 (1, '2024-10-31', '2024-10-21'),(1, '2024-11-24', '2024-11-14'),(2, '2025-10-31', '2025-10-21'),
 (2, '2025-5-20', '2025-5-10'),(3, '2024-12-31', '2024-12-21'),(3, '2024-12-31', '2024-12-21'),
 (4, '2025-8-20', '2025-8-10'),(4, '2025-2-20', '2025-2-10');
 
-insert into Usuarios (apellido, nombre, dni, idCargo) values ('Perez', 'Juan', 30222888, 1),
-('Gomez', 'Carlos', 30111333, 1),('Sian', 'Gonzalo', 31444999, 2);
+insert into Usuarios (apellido, nombre, dni, idCargo, userName, userPass) values 
+('Perez', 'Juan', 30222888, 1, 'jperez', '123'),
+('Gomez', 'Carlos', 30111333, 1, 'cgomez', '456'),
+('Sian', 'Gonzalo', 31444999, 2, 'gsian', '789');
 
 insert into Clientes (apellido, nombre, dni) values ('Cabral', 'Daniel', 10222333), 
 ('Diaz', 'Leon', 15666777), ('Frete', 'Gregorio', 20333444);
 
 insert into Vehiculos (patente, idCliente, idTipoVehiculo) values ('AAAA1234', 1, 1), 
 ('BBBB1234', null, 1), ('CCCC1234', null, 2), ('DDDD1234', null, 3);
+
+-- select * from Vehiculos;
 
 insert into HistoricoPrecios (fechaVigencia,fechaHoraCarga,idUsuarioCarga,idTipoVehiculo,precioPorHora,
 precioPorDia,precioLavado) values
@@ -215,14 +225,18 @@ fechaHoraAnulacion, idUsuario) values
 /*
 PRUEBAS DE CRUD REQUERIDAS
 
-select m.id as idMovimiento, pp.numeroPuestoPlaya, v.patente, m.fechahoraingreso, m.fechahoraegreso, t.fechaHoraDesde as fechaHoraDesdeLavado, 
+select m.id as idMovimiento, pp.numeroPuestoPlaya, v.patente, tv.descripcion as TipoVehiculo, m.fechahoraingreso, m.fechahoraegreso, t.fechaHoraDesde as fechaHoraDesdeLavado, 
 	t.fechaHoraHasta as fechaHoraHastaLavado, et.descripcion as estadoTurnoLavado, epp.descripcion as estadoPuesto, m.codigoBarraIn
 from movimientosplaya m
 left join vehiculos v on v.id=m.idvehiculo
 left join TurnosLavado t on t.idMovimientoPlaya=m.id
 left join estadosturnos et on et.id=t.idEstadoTurno
 left join PuestosDePlaya pp on pp.id=m.idPuestoDePlaya
-left join EstadosPuestosPlaya epp on epp.id=pp.idEstadoPuestoPlaya;
+left join EstadosPuestosPlaya epp on epp.id=pp.idEstadoPuestoPlaya
+left join TiposVehiculos tv on tv.id = v.idTipoVehiculo;
+
+select * from vehiculos
+select * from PuestosDePlaya
 
 -- INGRESA UN VEHÍCULO ASIGNÁNDOLE UN PUESTO EN LA PLAYA. NO DESEA TURNO DE LAVADO.
 insert into MovimientosPlaya (idPuestoDePlaya,idVehiculo,fechaHoraIngreso,idUsuarioIngreso,
@@ -246,3 +260,25 @@ update PuestosDePlaya set idEstadoPuestoPlaya=1 where id=3;
 delete from MovimientosPlaya where codigoBarraIn=1000004;
 
 */
+
+/* TP3: ANOTACIONES */
+use parking;
+
+select * from descuentosporhora;
+select * from vehiculos;
+select * from puestosdeplaya;
+select * from movimientosplaya;
+select * from HistoricoPrecios;
+select * from tiposvehiculos;
+select * from pisos;
+
+-- delete from descuentosporhora where id>3 and id<53;
+
+SELECT pp.id, pp.numeroPuestoPlaya, pp.idPiso, pp.idTipoVehiculo, pp.idEstadoPuestoPlaya 
+FROM PuestosDePlaya pp 
+LEFT JOIN EstadosPuestosPlaya ep ON pp.idEstadoPuestoPlaya = ep.id 
+WHERE ep.descripcion = "libre" AND pp.idTipoVehiculo = 1
+ORDER BY pp.idPiso, pp.numeroPuestoPlaya
+LIMIT 1;
+
+-- update puestosdeplaya set idEstadoPuestoPlaya=1 where id not in (1,2,9);
