@@ -43,7 +43,7 @@ public class GenericRepository<T, ID> implements IGenericRepository<T, ID> {
 
 					cantidadCamposIncluidos += 1;
 				} else {
-					System.out.println("Se excluye una clase compleja: " + field.getName());
+//					System.out.println("Se excluye una clase compleja: " + field.getName());
 				}
 			}
 
